@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import DayCreateForm
 from .models import Day
 
+
+# 関数型のview
 def index(request):
   context = {
     'day_list': Day.objects.all(), #データベースに保存されているデータを全て取得する
@@ -23,6 +25,7 @@ def add(request):
     'form': form
   }
   return render(request, 'diary/day_form.html', context)
+
 
 def update(request, pk):
   # urlのpkを基にDayを取得

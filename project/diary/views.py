@@ -1,69 +1,33 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views import generic
 from .forms import DayCreateForm
 from .models import Day
 
-def index(request):
-  context = {
-    'day_list': Day.objects.all(), #データベースに保存されているデータを全て取得する
-  }
-  return render(request, 'diary/day_list.html', context)
+
+# class型のview
+class IndexView(generic.ListView): #generic.ListViewを継承したclassを作成
+  model = Day
+  # template_name = 'diary/my_list.html' これでも可だが別途 my_list.htmlを作成する必要がある
 
 
-def add(request):
-  # 送信内容を基にフォームを作る。POSTじゃなければ空のフォーム
-  form = DayCreateForm(request.POST or None)
-
-  # method=POST の時の処理かつformの入力内容が問題なければ
-  if request.method == 'POST' and form.is_valid():
-    form.save() # modelがデータベースに保存される
-    return redirect('diary:index') #リダイレクト先を指定
-
-  # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
-  context = {
-    'form': form
-  }
-  return render(request, 'diary/day_form.html', context)
-
-def update(request, pk):
-  # urlのpkを基にDayを取得
-  day = get_object_or_404(Day, pk=pk)
-
-  form = DayCreateForm(request.POST or None, instance=day) #instance=day は取得したdayモデルに紐付ける
-
-  # method=POST の時の処理かつformの入力内容が問題なければ
-  if request.method == 'POST' and form.is_valid():
-    form.save() # modelがデータベースに保存される
-    return redirect('diary:index') #リダイレクト先を指定
-
-  # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
-  context = {
-    'form': form
-  }
-  return render(request, 'diary/day_form.html', context)
+class AddView(generic.CreateView):
+  model = Day
+  form_class = DayCreateForm
+  # fields = '__all__' #単縦な汎用viewならform.pyが不要な為はこれでもOK
+  success_url = reverse_lazy('diary:index') #データ追加が成功した時のリダイレクト先
 
 
-def delete(request, pk):
-  # urlのpkを基にDayを取得
-  day = get_object_or_404(Day, pk=pk)
-
-  # method=POST の時の処理かつformの入力内容が問題なければ
-  if request.method == 'POST':
-    day.delete() # dayインスタンスを削除する
-    return redirect('diary:index') #リダイレクト先を指定
-
-  # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
-  context = {
-    'day': day #dayモデルインスタンスを渡す
-  }
-  return render(request, 'diary/day_confirm_delete.html', context)
+class UpdateView(generic.UpdateView):
+  model = Day
+  form_class = DayCreateForm
+  success_url = reverse_lazy('diary:index')
 
 
-def detail(request, pk):
-  # urlのpkを基にDayを取得
-  day = get_object_or_404(Day, pk=pk)
+class DeleteView(generic.DeleteView):
+  model = Day
+  success_url = reverse_lazy('diary:index')
 
-  # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
-  context = {
-    'day': day #dayモデルインスタンスを渡す
-  }
-  return render(request, 'diary/day_detail.html', context)
+
+class DetailView(generic.DetailView):
+  model = Day
