@@ -1,0 +1,24 @@
+{% extends 'diary/base.html' %}
+{% block content %}
+
+<form action="" method="POST">
+  <table>
+    <tr>
+      <th>{{ day.title.label }}</th>
+      <td>{{ day.title }}</td>
+    </tr>
+    <tr>
+      <th>{{ day.text.label }}</th>
+      <td>{{ day.text }}</td>
+    </tr>
+    <tr>
+      <th>{{ day.date.label }}</th>
+      <td>{{ day.date }}</td>
+    </tr>
+  </table>
+  <p>こちらのデータを削除しますか？</p>
+  <button type="submit">送信</button>
+  {% csrf_token %} <!-- cross-site request forgeries 対策。POSTの場合は必要 -->
+</form>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'diary/base.html' %}
+{% block content %}
+
+<form action="" method="POST">
+  <table>
+    <tr>
+      <th>{{ form.title.label }}</th>
+      <td>{{ form.title }}</td>
+    </tr>
+    <tr>
+      <th>{{ form.text.label }}</th>
+      <td>{{ form.text }}</td>
+    </tr>
+    <tr>
+      <th>{{ form.date.label }}</th>
+      <td>{{ form.date }}</td>
+    </tr>
+  </table>
+    <!-- {{ form.as_p }} modelで設定したform内容を反映（as_p は入力欄がpタグに含まれて送信される） -->
+  <button type="submit">送信</button>
+  {% csrf_token %} <!-- cross-site request forgeries 対策。POSTの場合は必要 -->
+</form>
+
+{% endblock %}
