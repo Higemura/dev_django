@@ -17,6 +17,7 @@ class Club(models.Model):
   def __str__(self): # 特殊メソッド__str__を使うことで選択項目をわかりやすくする（self.name）
     return self.name
 
+
 class Employee(models.Model):
   first_name = models.CharField('名', max_length=20)
   last_name = models.CharField('姓', max_length=20)
@@ -28,5 +29,10 @@ class Employee(models.Model):
     Club, verbose_name='部活', # 第一引数にClubと紐付ける。verbose_nameは説明名
   )
   created_at = models.DateTimeField('日付', default=timezone.now) # 社員を作成した日付
+  # address = models.CharField('住所', max_length=20, default="aaa") # defaultはblank=Trueで空白OKにもできる
+  models.OneToOneField
+
+  # コメント
+
   def __str__(self):
     return '{0} {1} {2}'.format(self.last_name, self.first_name, self.department)
