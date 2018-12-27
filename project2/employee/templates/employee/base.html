@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
+
+  <nav>
+    <a href="#">ロゴ</a>
+    <button type="button">
+      ボタン
+    </button>
+    <ul>
+      <li>
+        <a href="{% url 'employee:index' %}">一覧</a>
+      </li>
+      {% if user.is_super %}
+      <li>
+        <a href="{% url 'admin:employee_employee_add' %}">追加</a>
+      </li>
+      {% endif %}
+    </ul>
+    <form action="">
+      <input type="text" placeholder="Search">
+      <button type="submit">Search</button>
+    </form>
+  </nav>
   <div class="container">
     {% block content %}
     {% endblock %}
   </div>
 </body>
+
 </html>
